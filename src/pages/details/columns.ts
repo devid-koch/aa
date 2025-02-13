@@ -18,15 +18,15 @@ export const getColumns = (dataType,type) => {
       case "tcs":
         return tcsDuplicateColumns
       case "batchs":
-        return batchsDuplicateColumns;
+        return batchsColumns;
       case "trainers":
         return trainersDuplicateColumns;
       case "assessors":
-        return assessorsDuplicateColumns;
+        return assessorsColumns;
       case "assessements":
-        return assessementsDuplicateColumns
+        return assessementsColumns
       case "placements":
-        return placementsDuplicateColumns;
+        return placementsColumns;
       default:
         return schemeColumns;
     }
@@ -485,7 +485,25 @@ const trainersDuplicateColumns =[
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-    },
+  },
+  {
+    field: "TrainerName",
+    headerName: "Trainer Name",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "departmentNames",
+    headerName: "Department Names",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 const trainersColumns =[
   {
@@ -493,7 +511,31 @@ const trainersColumns =[
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-    },
+  },
+  {
+    field: "pklConvTrainerId",
+    headerName: "Conv Trainer Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsTrainerName",
+    headerName: "Trainer Name",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsEmail",
+    headerName: "Email Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 const assessorsColumns =[
   {
@@ -501,7 +543,31 @@ const assessorsColumns =[
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-    },
+  },
+  {
+    field: "pklConvAssessorId",
+    headerName: "Conv Assessor Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsAssosserName",
+    headerName: "Assosser Name",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsEmail",
+    headerName: "Email",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsMobile",
+    headerName: "Mobile",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 
 const assessementsColumns = [
@@ -510,7 +576,31 @@ const assessementsColumns = [
     headerName: "Sl. No",
     width: 80,
     renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-  }
+  },
+  {
+    field: "batchId",
+    headerName: "Batch Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "SDMSBatchId",
+    headerName: "SDMS Batch Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsAgency",
+    headerName: "Agency",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsAccessorName",
+    headerName: "Accessor Name",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 const assessementsDuplicateColumns = [
   {
@@ -518,7 +608,25 @@ const assessementsDuplicateColumns = [
     headerName: "Sl. No",
     width: 80,
     renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-  }
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 
 const placementsColumns =[
@@ -527,7 +635,32 @@ const placementsColumns =[
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-    },
+  },
+  {
+    field: "batchId",
+    headerName: "Batch Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "candidateId",
+    headerName: "Candidate Id",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsMonthlySalary",
+    headerName: "Monthly Salary",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsEmployeerContactNumber",
+    headerName: "Employeer Contact Number",
+    flex:0.5,
+    minWidth:80
+  },
+  
 ]
 const placementsDuplicateColumns =[
   {
@@ -535,7 +668,20 @@ const placementsDuplicateColumns =[
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-    },
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
+
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 const assessorsDuplicateColumns =[
   {
@@ -543,7 +689,25 @@ const assessorsDuplicateColumns =[
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
-    },
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
+  {
+    field: "vsPAN",
+    headerName: "Pan",
+    flex:0.5,
+    minWidth:80
+  },
 ]
 
 const batchsColumns = [
@@ -577,8 +741,8 @@ const batchsColumns = [
     flex:0.5,
     minWidth:80
   },
-  
 ]
+
 const batchsDuplicateColumns = [
    {
       field: "slNo",
