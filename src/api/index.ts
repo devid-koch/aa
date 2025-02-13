@@ -1,9 +1,14 @@
 import axios from "axios";
 
-export const departmentFetchCounts = async (departmentId: any) => {
+export const departmentFetchCounts = async (departmentId: any, integrationType?: number) => {
+  const requestBody: Record<string, any> = { department_id: departmentId };
+
+  if (integrationType !== undefined) {
+    requestBody.integrationType = integrationType;
+  }
   const response = await axios.post(
     import.meta.env.VITE_BASE_API_URL + "dashboard/home",
-    { department_id: departmentId }
+    requestBody
   );
   return response.data.data.count;
 };

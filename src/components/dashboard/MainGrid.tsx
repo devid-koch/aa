@@ -91,7 +91,7 @@ export default function MainGrid() {
       setError(null);
       const requestId = DEPARTMENT_ID_MAP[departmentId] || departmentId;
       if (departmentId !== "all") {
-        const response = await departmentFetchCounts(requestId);
+        const response = await departmentFetchCounts(requestId, integrationType ? Number(integrationType) : undefined)
         setCountData(response);
       } else {
         setCountData({});
@@ -105,7 +105,7 @@ export default function MainGrid() {
 
   useEffect(() => {
     fetchCount(tabs);
-  }, [tabs]);
+  }, [tabs, integrationType]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setTabs(newValue);
@@ -115,6 +115,10 @@ export default function MainGrid() {
 
     setDepartmentName(selectedDepartment?.departmentFullName)
   };
+
+  const handleChangeIntegration = (event: any) => {
+    setIntegrationType(event.target.value)
+  }
 
   const labels = Object.keys(tabs !== "all" ? countData ?? {} : fetchData?.count ?? {});
   const values = Object.values(tabs !== "all" ? countData ?? {} : fetchData?.count ?? {}).map(String);
@@ -129,18 +133,22 @@ export default function MainGrid() {
       <Typography component="h2" variant="h6" sx={ { mb: 2 } }>
         Overview
       </Typography>
-      <FormControl sx={ { width: 200 } }>
-        <InputLabel id="demo-simple-select-label">Integration Type</InputLabel>
-        <Select
-          value={ integrationType }
-          label="Integration Type"
-          onChange={ (e) => setIntegrationType(e.target.value) }
-        >
-          <MenuItem value={ 1 }>Manual Upload</MenuItem>
-          <MenuItem value={ 2 }>Bulk Upload (Excel Sheet)</MenuItem>
-          <MenuItem value={ 3 }>API Integration</MenuItem>
-        </Select>
-      </FormControl>
+      { tabs !== "all" &&
+        <>
+          <FormControl sx={ { width: 200, padding: 2 } }>
+            <InputLabel id="demo-simple-select-label">Integration Type</InputLabel>
+            <Select
+              value={ integrationType }
+              label="Integration Type"
+              onChange={ handleChangeIntegration }
+            >
+              <MenuItem value={ 1 }>Manual Upload</MenuItem>
+              <MenuItem value={ 2 }>Bulk Upload (Excel Sheet)</MenuItem>
+              <MenuItem value={ 3 }>API Integration</MenuItem>
+            </Select>
+          </FormControl>
+        </>
+      }
       <Grid
         container
         spacing={ 2 }
