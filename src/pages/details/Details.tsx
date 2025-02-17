@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { getColumns } from "./columns";
+import { departmentColumnsMap, infoTextMap } from "./InfoData";
 
 const Details = () => {
   const { department_name, type, id } = useParams();
@@ -29,6 +30,8 @@ const Details = () => {
   const [skip, setSkip] = useState(0);
   const [take, setTake] = useState(10);
   const [totalRows, setTotalRows] = useState(0);
+  const [selectedRows, setSelectedRows] = useState(new Set());
+  const [selectedColumns, setSelectedColumns] = useState([]);
 
   const navigate = useNavigate();
 
@@ -43,6 +46,7 @@ const Details = () => {
           skip: skip,
           take: 50,
           data_type: dataType,
+          ...(selectedColumns.length > 0 && { duplicateQuery: selectedColumns })
         };
         const response = await getDepartmentData(requestBody);
         setDataList(response);
@@ -56,7 +60,7 @@ const Details = () => {
 
   useEffect(() => {
     fetchData();
-  }, [id, dataType, skip, take]);
+  }, [id, dataType, skip, take, selectedColumns]);
 
   const handleDataTypeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -70,6 +74,8 @@ const Details = () => {
   };
 
   const columns = getColumns(dataType, type);
+
+  const columnsForCurrentDepartment = departmentColumnsMap[department_name] || [];
 
   //   fklDepartmentId
   // :
@@ -102,6 +108,30 @@ const Details = () => {
   // :
   // "4"
 
+  // Handle checkbox toggle for rows
+  const handleCheckboxToggle = (rowId) => {
+    setSelectedRows((prevSelectedRows) => {
+      const newSelected = new Set(prevSelectedRows);
+      if (newSelected.has(rowId)) {
+        newSelected.delete(rowId);
+      } else {
+        newSelected.add(rowId);
+      }
+      return newSelected;
+    });
+  };
+
+  // Handle checkbox toggle for API columns
+  const handleColumnCheckboxToggle = (column) => {
+    setSelectedColumns((prevSelectedColumns) => {
+      if (prevSelectedColumns.includes(column)) {
+        return prevSelectedColumns.filter((item) => item !== column);
+      } else {
+        return [...prevSelectedColumns, column];
+      }
+    });
+  };
+
   const handlePageSize = (item) => {
     console.log(item);
 
@@ -115,6 +145,7 @@ const Details = () => {
     id: index + 1,
   })) : [];
 
+  const infoText = infoTextMap[type] || "";
 
   return (
     <div>
@@ -135,7 +166,7 @@ const Details = () => {
         sx={ { textTransform: "capitalize", textAlign: "center" } }
       >
         { department_name } { type } Data ** <br />
-        <p style={ { fontSize: 15 } }>Duplicate records are identified based on matching 'Candidate First Name', 'Date Of Birth', 'Phone No' and 'Aadhar Last 4 digit' across multiple logins, highlighting common entries found in different departments.</p>
+        {infoText && <p style={ { fontSize: 15,backgroundColor:"#c4c920" } }>{infoText}</p>}
       </Typography>
       <Stack width={ 200 } mb={ 5 }>
         <FormControl>
@@ -153,6 +184,18 @@ const Details = () => {
         </FormControl>
 
       </Stack>
+      <Box mb={3}>
+        <Typography variant="h6">Select Duplicate Query Columns:</Typography>
+        {columnsForCurrentDepartment.map((column) => (
+          <label key={column} style={{ marginRight: "15px" }}>
+            <Checkbox
+              checked={selectedColumns.includes(column)}
+              onChange={() => handleColumnCheckboxToggle(column)}
+            />
+            {column}
+          </label>
+        ))}
+      </Box>
       {/* <div>
         <button
           onClick={() => handlePagination(skip - take)}
