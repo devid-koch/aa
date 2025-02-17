@@ -15,14 +15,18 @@ export const typeColumnsMap = {
     "candidates": ["vsCandidateName", "vsDOB"],
     "trainers" : ["TrainerName",],
     "sectors" : ["pklSectorId","vsSectorName"],
-    "tps" : ["vsTpName","vsPan"]
+    "tps": ["vsTpName", "vsPan"],
+    "tcs": ["pklTcId","vsTcName","vsTcCode"]
   };
 
 
 
 export const columnDisplayMap = {
     vsCourseName: "Course Name",
-    pklSectorId:"Sector ID",
+    pklSectorId: "Sector ID",
+    pklTcId: "TC Id",
+    vsTcName: "TC Name",
+    vsTcCode:"TC Code",
     vsCourseCode: "Course Code",
     vsSchemeName: "Scheme Name",
     vsSchemeType: "Scheme Type",

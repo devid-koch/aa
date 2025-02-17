@@ -88,18 +88,18 @@ const Details = () => {
     ...col,
     headerName: (
       <>
-        {col.headerName}
+        { col.headerName }
       </>
     ),
     renderCell: (params) => {
       return (
         <div
-          style={{
+          style={ {
             display: "inline",
             backgroundColor: selectedColumns.includes(col.field) ? "#fef08a" : "transparent",
-          }}
+          } }
         >
-          {params.value}
+          { params.value }
         </div>
       );
     },
@@ -165,7 +165,7 @@ const Details = () => {
         sx={ { textTransform: "capitalize", textAlign: "center" } }
       >
         { department_name } { type } Data ** <br />
-        {infoText && <p style={ { fontSize: 15,backgroundColor:"#fef08a" } }>{infoText}</p>}
+        { infoText && <p style={ { fontSize: 15, backgroundColor: "#fef08a" } }>{ infoText }</p> }
       </Typography>
       <Stack width={ 200 } mb={ 5 }>
         <FormControl>
@@ -183,19 +183,19 @@ const Details = () => {
         </FormControl>
 
       </Stack>
-      {dataType === "duplicate" &&
-      <Box mb={3}>
-        <Typography variant="h6">Select Duplicate Query Columns:</Typography>
-        {columnsForCurrentDepartment.map((column) => (
-          <label key={column} style={{ marginRight: "15px" }}>
-            <Checkbox
-              checked={selectedColumns.includes(column)}
-              onChange={() => handleColumnCheckboxToggle(column)}
-            />
-            {columnDisplayMap[column]}
-          </label>
-        ))}
-      </Box>
+      { dataType === "duplicate" &&
+        <Box mb={ 3 }>
+          <Typography variant="h6">Select Duplicate Query Columns:</Typography>
+          { columnsForCurrentDepartment.map((column) => (
+            <label key={ column } style={ { marginRight: "15px" } }>
+              <Checkbox
+                checked={ selectedColumns.includes(column) }
+                onChange={ () => handleColumnCheckboxToggle(column) }
+              />
+              { columnDisplayMap[column] }
+            </label>
+          )) }
+        </Box>
       }
       {/* <div>
         <button

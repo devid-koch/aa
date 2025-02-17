@@ -65,7 +65,7 @@ export const getColumns = (dataType,type) => {
 
 const sectorsColumns = [
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -98,7 +98,7 @@ const sectorsColumns = [
 
 const duplicateSectorColumns = [
     {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -131,7 +131,7 @@ const duplicateSectorColumns = [
 
 const schemeColumns = [
     {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -206,7 +206,7 @@ const departmentDuplicateColumns=[]
 
 const schemeDuplicateColumns = [
    {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -224,6 +224,18 @@ const schemeDuplicateColumns = [
       minWidth: 200,
     },
     {
+      field: "vsFundName",
+      headerName: "Fund Name",
+      flex: 0.5,
+      minWidth: 150,
+    },
+    {
+      field: "vsFundingType",
+      headerName: "Fund Type",
+      flex: 0.5,
+      minWidth: 150,
+    },
+    {
       field: "departmentNames",
       headerName: "Department Names",
       flex: 1.5,
@@ -233,7 +245,7 @@ const schemeDuplicateColumns = [
 
 const coursesDuplicateColumns = [
    {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -260,7 +272,7 @@ const coursesDuplicateColumns = [
 
 const coursesColumns = [
    {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -329,7 +341,7 @@ const coursesColumns = [
 
 const tpsColumns = [
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -377,7 +389,7 @@ const tpsColumns = [
 
 const tpsDuplicateColumns = [
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -404,7 +416,7 @@ const tpsDuplicateColumns = [
 
 const tcsColumns = [
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -428,8 +440,8 @@ const tcsColumns = [
     minWidth:80
   },
   {
-    field: "pklTcId",
-    headerName: "Tc Id",
+    field: "vsSpocName",
+    headerName: "Spoc Name",
     flex:0.5,
     minWidth:80
   },
@@ -437,7 +449,7 @@ const tcsColumns = [
 
 const tcsDuplicateColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -461,15 +473,15 @@ const tcsDuplicateColumns =[
     minWidth:80
   },
   {
-    field: "pklTcId",
-    headerName: "Tc Id",
+    field: "vsSpocName",
+    headerName: "Spoc Name",
     flex:0.5,
     minWidth:80
   },
 ]
 const trainersDuplicateColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -495,7 +507,7 @@ const trainersDuplicateColumns =[
 ]
 const trainersColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -527,7 +539,7 @@ const trainersColumns =[
 ]
 const assessorsColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -560,7 +572,7 @@ const assessorsColumns =[
 
 const assessementsColumns = [
   {
-    field: "slNo",
+    field: "id",
     headerName: "Sl. No",
     width: 80,
     renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -592,7 +604,7 @@ const assessementsColumns = [
 ]
 const assessementsDuplicateColumns = [
   {
-    field: "slNo",
+    field: "id",
     headerName: "Sl. No",
     width: 80,
     renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -619,7 +631,7 @@ const assessementsDuplicateColumns = [
 
 const placementsColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -652,7 +664,7 @@ const placementsColumns =[
 ]
 const placementsDuplicateColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -673,7 +685,7 @@ const placementsDuplicateColumns =[
 ]
 const assessorsDuplicateColumns =[
   {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -700,7 +712,7 @@ const assessorsDuplicateColumns =[
 
 const batchsColumns = [
    {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -729,11 +741,35 @@ const batchsColumns = [
     flex:0.5,
     minWidth:80
   },
+  {
+    field: "dtStartDate",
+    headerName: "Start Date",
+    flex:0.5,
+    minWidth:80,
+    valueFormatter: (params) => {
+        if (params) {
+          return format(params, "dd/MM/yyyy");
+        }
+        return "";
+      },
+  },
+  {
+    field: "dtEndDate",
+    headerName: "End Date",
+    flex:0.5,
+    minWidth: 80,
+    valueFormatter: (params) => {
+        if (params) {
+          return format(params, "dd/MM/yyyy");
+        }
+        return "";
+      },
+  }
 ]
 
 const batchsDuplicateColumns = [
    {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
@@ -786,7 +822,7 @@ const CandidateColumns = [
 
 const candidateDuplicateColumns = [
    {
-      field: "slNo",
+      field: "id",
       headerName: "Sl. No",
       width: 80,
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
