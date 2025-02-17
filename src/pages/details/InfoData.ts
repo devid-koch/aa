@@ -9,8 +9,31 @@ export const infoTextMap = {
 };
 
 
-export const departmentColumnsMap = {
-    "courses": ["vsCourseName", "fklSectorId", "vsCourseCode"],
-    "Health": ["vsHospitalName", "vsDoctorId", "vsPatientCode"],
-    "Finance": ["vsAccountNumber", "vsTransactionId", "vsBankCode"]
+export const typeColumnsMap = {
+    "courses": ["vsCourseName", "vsCourseCode"],
+    "schemes": ["vsSchemeName", "vsSchemeType"],
+    "candidates": ["vsCandidateName", "vsDOB"],
+    "trainers" : ["TrainerName",],
+    "sectors" : ["pklSectorId","vsSectorName"],
+    "tps" : ["vsTpName","vsPan"]
   };
+
+
+
+export const columnDisplayMap = {
+    vsCourseName: "Course Name",
+    pklSectorId:"Sector ID",
+    vsCourseCode: "Course Code",
+    vsSchemeName: "Scheme Name",
+    vsSchemeType: "Scheme Type",
+    vsCandidateName:"Candidate Name",
+    vsDOB:"DOB",
+    TrainerName:"Trainer Name",
+    vsSectorName:"Sector Name",
+    vsTpName:"Tp Name",
+    vsPan:"PAN",
+    
+
+    
+  };
+  

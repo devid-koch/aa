@@ -7,6 +7,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import {
   Box,
   Button,
+  Checkbox,
   FormControl,
   FormLabel,
   Grid,
@@ -18,7 +19,7 @@ import {
 } from "@mui/material";
 import { format } from "date-fns";
 import { getColumns } from "./columns";
-import { departmentColumnsMap, infoTextMap } from "./InfoData";
+import { columnDisplayMap, infoTextMap, typeColumnsMap } from "./InfoData";
 
 const Details = () => {
   const { department_name, type, id } = useParams();
@@ -75,38 +76,34 @@ const Details = () => {
 
   const columns = getColumns(dataType, type);
 
-  const columnsForCurrentDepartment = departmentColumnsMap[department_name] || [];
+  const columnsForCurrentDepartment = typeColumnsMap[type] || [];
 
-  //   fklDepartmentId
-  // :
-  // "3"
-  // iUploadMethod
-  // :
-  // null
-  // pklSchemeId
-  // :
-  // 83
-  // sanctionOrderNo
-  // :
-  // "2"
-  // vsFundName
-  // :
-  // null
-  // vsSchemeCode
-  // :
-  // "22"
-  // vsSchemeFUndingRatio
-  // :
-  // "2"
-  // vsSchemeFundingType
-  // :
-  // "4"
-  // vsSchemeName
-  // :
-  // "new"
-  // vsSchemeType
-  // :
-  // "4"
+  const handleColumnToggle = (column: string) => {
+    setSelectedColumns((prev) =>
+      prev.includes(column) ? prev.filter((c) => c !== column) : [...prev, column]
+    );
+  };
+
+  const updatedColumns = columns.map((col) => ({
+    ...col,
+    headerName: (
+      <>
+        {col.headerName}
+      </>
+    ),
+    renderCell: (params) => {
+      return (
+        <div
+          style={{
+            display: "inline",
+            backgroundColor: selectedColumns.includes(col.field) ? "#fef08a" : "transparent",
+          }}
+        >
+          {params.value}
+        </div>
+      );
+    },
+  }));
 
   // Handle checkbox toggle for rows
   const handleCheckboxToggle = (rowId) => {
@@ -120,6 +117,8 @@ const Details = () => {
       return newSelected;
     });
   };
+
+
 
   // Handle checkbox toggle for API columns
   const handleColumnCheckboxToggle = (column) => {
@@ -166,7 +165,7 @@ const Details = () => {
         sx={ { textTransform: "capitalize", textAlign: "center" } }
       >
         { department_name } { type } Data ** <br />
-        {infoText && <p style={ { fontSize: 15,backgroundColor:"#c4c920" } }>{infoText}</p>}
+        {infoText && <p style={ { fontSize: 15,backgroundColor:"#fef08a" } }>{infoText}</p>}
       </Typography>
       <Stack width={ 200 } mb={ 5 }>
         <FormControl>
@@ -184,6 +183,7 @@ const Details = () => {
         </FormControl>
 
       </Stack>
+      {dataType === "duplicate" &&
       <Box mb={3}>
         <Typography variant="h6">Select Duplicate Query Columns:</Typography>
         {columnsForCurrentDepartment.map((column) => (
@@ -192,10 +192,11 @@ const Details = () => {
               checked={selectedColumns.includes(column)}
               onChange={() => handleColumnCheckboxToggle(column)}
             />
-            {column}
+            {columnDisplayMap[column]}
           </label>
         ))}
       </Box>
+      }
       {/* <div>
         <button
           onClick={() => handlePagination(skip - take)}
@@ -209,7 +210,7 @@ const Details = () => {
       <CustomizedDataGrid
         loading={ loading }
         totalRows={ dataList?.total }
-        Columns={ columns } Data={ rows } />
+        Columns={ updatedColumns } Data={ rows } />
     </div>
   );
 };

@@ -82,12 +82,6 @@ const sectorsColumns = [
       flex:0.5,
       width: 80,
   },
-    {
-      field: "vsSectorName",
-      headerName: "Sector Name",
-      flex:0.5,
-      width: 80,
-    },
   {
       field: "dtCreatedAt",
     headerName: "Created At",
@@ -121,12 +115,6 @@ const duplicateSectorColumns = [
       flex:0.5,
       width: 80,
   },
-    {
-      field: "vsSectorName",
-      headerName: "Sector Name",
-      flex:0.5,
-      width: 80,
-    },
   {
       field: "dtCreatedAt",
     headerName: "Created At",
