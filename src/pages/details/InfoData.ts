@@ -13,17 +13,32 @@ export const typeColumnsMap = {
     "courses": ["vsCourseName", "vsCourseCode"],
     "schemes": ["vsSchemeName", "vsSchemeType"],
     "candidates": ["vsCandidateName", "vsDOB"],
-    "trainers" : ["TrainerName",],
+    "trainers" : ["TrainerName","vsPan"],
     "sectors" : ["pklSectorId","vsSectorName"],
     "tps": ["vsTpName", "vsPan"],
-    "tcs": ["pklTcId","vsTcName","vsTcCode"]
+    "tcs": ["pklTcId","vsTcName","vsTcCode"],
+    "batchs": ["pklBatchId","SDMSid","fklCourseId","QPNOS"],
+    "assessors":["pklConvAssessorId","vsAssosserName","vsEmail"],
+    "assessements":["batchId","SDMSBatchId","vsAgency"],
+    "placements":["batchId","candidateId"]
   };
 
 
 
 export const columnDisplayMap = {
     vsCourseName: "Course Name",
+    pklConvAssessorId:"Conv Assessor Id",
+    SDMSBatchId:"SDMS Batch Id",
+    vsAgency:"Agency",
+    vsEmail:"Email",
+    vsAssosserName:"Assosser Name",
+    pklBatchId:"Batch Id",
+    batchId:"Batch Id",
+    candidateId:"Candidate Id",
     pklSectorId: "Sector ID",
+    QPNOS:"QPNOS",
+    SDMSid:"SDMS Id",
+    fklCourseId:"Course Id",
     pklTcId: "TC Id",
     vsTcName: "TC Name",
     vsTcCode:"TC Code",

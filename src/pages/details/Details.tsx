@@ -4,6 +4,7 @@ import CustomizedDataGrid from "../../components/dashboard/CustomizedDataGrid";
 import { useEffect, useState } from "react";
 import { getDepartmentData } from "../../api";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import DownloadIcon from "@mui/icons-material/Download";
 import {
   Box,
   Button,
@@ -20,6 +21,7 @@ import {
 import { format } from "date-fns";
 import { getColumns } from "./columns";
 import { columnDisplayMap, infoTextMap, typeColumnsMap } from "./InfoData";
+import { handleDownloadReport } from "../../utils/ExcelSheet";
 
 const Details = () => {
   const { department_name, type, id } = useParams();
@@ -75,7 +77,6 @@ const Details = () => {
   };
 
   const columns = getColumns(dataType, type);
-
   const columnsForCurrentDepartment = typeColumnsMap[type] || [];
 
   const handleColumnToggle = (column: string) => {
@@ -182,6 +183,16 @@ const Details = () => {
           </Select>
         </FormControl>
 
+        <Box mt={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={ ()=>handleDownloadReport(columns,rows) }
+            startIcon={<DownloadIcon />}
+          >
+            Download Report
+          </Button>
+        </Box>
       </Stack>
       { dataType === "duplicate" &&
         <Box mb={ 3 }>
@@ -197,6 +208,9 @@ const Details = () => {
           )) }
         </Box>
       }
+
+    
+
       {/* <div>
         <button
           onClick={() => handlePagination(skip - take)}
