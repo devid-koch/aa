@@ -51,6 +51,7 @@ const Details = () => {
           skip: skip,
           take: 50,
           data_type: dataType,
+          ...(type === "schemes" && dataType==="duplicate" &&  { duplicateQuery: ["vsSchemeName"] }),
           ...(selectedColumns.length > 0 && { duplicateQuery: selectedColumns })
         };
         const response = await getDepartmentData(requestBody);
