@@ -840,6 +840,12 @@ const candidateDuplicateColumns = [
       minWidth: 200,
     },
     {
+      field: "vsUUID",
+      headerName: "UUID",
+      flex: 1.5,
+      minWidth: 200,
+    },
+    {
       field: "vsDOB",
       headerName: "DOB",
       flex: 1.5,

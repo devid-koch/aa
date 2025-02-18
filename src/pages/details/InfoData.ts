@@ -12,7 +12,7 @@ export const infoTextMap = {
 export const typeColumnsMap = {
     "courses": ["vsCourseName", "vsCourseCode"],
     "schemes": ["vsSchemeName", "vsSchemeType"],
-    "candidates": ["vsCandidateName", "vsDOB"],
+    "candidates": ["vsCandidateName", "vsDOB","vsUUID","vsMobile"],
     "trainers" : ["TrainerName","vsPan"],
     "sectors" : ["pklSectorId","vsSectorName"],
     "Training Partner": ["vsTpName", "vsPan"],
@@ -28,6 +28,8 @@ export const typeColumnsMap = {
 export const columnDisplayMap = {
     vsCourseName: "Course Name",
     pklConvAssessorId:"Conv Assessor Id",
+    vsUUID:"UUID",
+    vsMobile:"Mobile",
     SDMSBatchId:"SDMS Batch Id",
     vsAgency:"Agency",
     vsEmail:"Email",
