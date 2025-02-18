@@ -188,7 +188,7 @@ export default function MainGrid() {
           ? Object.entries(countData ?? {}).map(([key, value], index) => (
             <Grid key={ index } size={ { xs: 12, sm: 4, lg: 1 } }>
               <StatCard
-                title={ key }
+                title={ key === "tps" ? "Training Partner" : key === "tcs" ? "Training Center" : key }
                 value={ value.toString() }
                 isNavigate={ true }
                 departmentId={ tabs }
@@ -200,7 +200,8 @@ export default function MainGrid() {
           : Object.entries(fetchData?.count ?? {})?.map(
             ([key, value], index) => (
               <Grid key={ index } size={ { xs: 12, sm: 4, lg: 1 } }>
-                <StatCard title={ key } value={ value.toString() } />
+                <StatCard title={ key === "tps" ? "Training Partner" : key === "tcs" ? "Training Center" : key }
+                value={ value.toString() } />
               </Grid>
             )
           ) }

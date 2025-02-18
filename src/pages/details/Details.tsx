@@ -43,8 +43,10 @@ const Details = () => {
       setLoading(true);
       setError(null);
       if (id) {
+        const modifiedType = type === "Training Partner" ? "tps" : 
+                                type === "Training Center" ? "tcs" : type;
         const requestBody = {
-          card: type,
+          card: modifiedType,
           department: parseInt(id, 10),
           skip: skip,
           take: 50,

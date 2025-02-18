@@ -13,9 +13,9 @@ export const getColumns = (dataType,type) => {
         return duplicateSectorColumns;
       case "courses":
         return coursesDuplicateColumns;
-      case "tps":
+      case "Training Partner":
         return tpsDuplicateColumns;
-      case "tcs":
+      case "Training Center":
         return tcsDuplicateColumns
       case "batchs":
         return batchsColumns;
@@ -43,9 +43,9 @@ export const getColumns = (dataType,type) => {
       return sectorsColumns;
     case "courses":
       return coursesColumns;
-    case "tps":
+    case "Training Partner":
       return tpsColumns;
-    case "tcs":
+    case "Training Center":
       return tcsColumns;
     case "batchs":
       return batchsColumns;
@@ -828,20 +828,14 @@ const candidateDuplicateColumns = [
       renderCell: (params) => params.api.getRowIndexRelativeToVisibleRows(params.id) + 1,
     },
     {
-      field: "candidateId",
-      headerName: "Candidate Id",
-      flex: 1.5,
-      minWidth: 200,
-    },
-    {
         field: "vsCandidateName",
         headerName: "Candidate Name",
         flex: 1.5,
         minWidth: 200,
     },
     {
-      field: "departmentNames",
-      headerName: "Department Names",
+      field: "vsMobile",
+      headerName: "Phone",
       flex: 1.5,
       minWidth: 200,
     },
@@ -856,5 +850,11 @@ const candidateDuplicateColumns = [
         }
         return "";
       },
+    },
+    {
+      field: "departmentNames",
+      headerName: "Department Names",
+      flex: 1.5,
+      minWidth: 200,
     },
 ]
