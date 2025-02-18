@@ -407,6 +407,12 @@ const tpsDuplicateColumns = [
     minWidth:80
   },
   {
+    field: "iSpocContactNum",
+    headerName: "Spoc Contact Num",
+    flex: 0.5,
+    minWidth:80
+  },
+  {
     field: "departmentNames",
     headerName: "Department Names",
     flex: 0.5,
