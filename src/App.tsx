@@ -7,6 +7,7 @@ import Header from "./components/header";
 import { Toaster } from "sonner";
 import Dashboard from "./pages/Dashboard";
 import Details from "./pages/details/Details";
+import NewDashboard from "./components/new-dashboard/NewDashboard";
 
 function App() {
   return (
@@ -15,10 +16,10 @@ function App() {
       <Header />
       <Dashboard />
       <Toaster /> */}
-      <Header />
+      {/* <Header /> */ }
       <Router>
         <Routes>
-          <Route path="/" element={ <Dashboard /> } />
+          <Route path="/" element={ <NewDashboard /> } />
           <Route path="/:department_name/:type/:id" element={ <Details /> } />
         </Routes>
       </Router>

@@ -31,7 +31,7 @@ export interface Enrollment {
   total: number;
 }
 
-export default function useDashboardData() {
+export default function useDashboardData(payload:any) {
   const [data, setData] = React.useState<Data>();
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSuccess, setIsSuccess] = React.useState(false);
@@ -41,7 +41,7 @@ export default function useDashboardData() {
     setIsSuccess(false);
     try {
       const response = await axios.post(
-        import.meta.env.VITE_BASE_API_URL + "dashboard/home"
+        import.meta.env.VITE_BASE_API_URL + "dashboard/home", payload
       );
       setData(response?.data?.data);
       setIsSuccess(true);

@@ -77,7 +77,7 @@ export default function MainGrid() {
     "1017": "NULM",
     "1022": "ASDM"
   };
-  const { data: fetchData, isLoading } = useDashboardData();
+  const { data: fetchData, isLoading } = useDashboardData("payload");
   const [tabs, setTabs] = useState("all");
   const [departmentName, setDepartmentName] = useState("");
   const [countData, setCountData] = useState({});

@@ -6,7 +6,7 @@ import DashboardSkeleton from "./dashboard-skeleton";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function Dashboard() {
-  const { data, isLoading, refetch } = useDashboardData();
+  const { data, isLoading, refetch } = useDashboardData("payload");
 
   if (isLoading) {
     return <DashboardSkeleton />;
