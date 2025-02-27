@@ -21,7 +21,6 @@ const data = [
   { label: 'Brazil', value: 10000 },
   { label: 'Other', value: 5000 },
 ];
-
 const countries = [
   {
     name: 'India',
