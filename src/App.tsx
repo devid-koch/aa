@@ -8,6 +8,7 @@ import { Toaster } from "sonner";
 import Dashboard from "./pages/Dashboard";
 import Details from "./pages/details/Details";
 import NewDashboard from "./components/new-dashboard/NewDashboard";
+import ListDetails from "./components/new-dashboard/ListDetails";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Routes>
           <Route path="/" element={ <NewDashboard /> } />
           <Route path="/:department_name/:type/:id" element={ <Details /> } />
+          <Route path="/candidate-details" element={ <ListDetails /> } />
         </Routes>
       </Router>
       <Toaster />

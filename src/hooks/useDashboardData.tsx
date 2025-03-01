@@ -20,6 +20,7 @@ interface Count {
 interface Data {
   departmentWiseEnrollment: Enrollment[];
   department: any;
+  deptBySchemes: any;
   count: Count;
 }
 
@@ -31,7 +32,7 @@ export interface Enrollment {
   total: number;
 }
 
-export default function useDashboardData(payload:any) {
+export default function useDashboardData(payload: any) {
   const [data, setData] = React.useState<Data>();
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSuccess, setIsSuccess] = React.useState(false);

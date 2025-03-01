@@ -5,21 +5,21 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, T
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
-const Charts = ({data}) => {
+const Charts = ({ data }) => {
 
     const uniqueData = [
         data?.duplicateChart?.tp.unique,
         data?.duplicateChart?.tc.unique,
         data?.duplicateChart.trainer?.unique,
         data?.duplicateChart.candidate.unique,
-      ];
-      
-      const duplicateData = [
+    ];
+
+    const duplicateData = [
         data?.duplicateChart.tp.duplicate,
         data?.duplicateChart.tc.duplicate,
         data?.duplicateChart.trainer.duplicate,
         data?.duplicateChart.candidate.duplicate,
-      ];
+    ];
     const barData = {
         labels: ["Training Partners", "Training Centers", "Trainers", "Candidates"],
         datasets: [
@@ -44,38 +44,38 @@ const Charts = ({data}) => {
             {
                 data: data?.genderChart?.map(item => item.count),
                 backgroundColor: [
-                  "rgba(244, 63, 94,1)",
-                  "rgba(2, 132, 199,1)",
-                  "rgba(170, 170, 170,1)"
+                    "rgba(244, 63, 94,1)",
+                    "rgba(2, 132, 199,1)",
+                    "rgba(170, 170, 170,1)"
                 ],
                 hoverOffset: 4,
                 rotation: 120,
                 cutout: "70%",
                 borderRadius: 15,
-              },
+            },
         ],
     };
 
     const chartOptions = {
         responsive: true,
         scales: {
-          y: {
-            beginAtZero: true,
-            min: 0,  // Starting at 0
-            max: 200000,  // Adjust this based on your expected data range
-            ticks: {
-              stepSize: 20000,  // Define step size for tick marks
-              autoSkip: true,  // Ensure labels do not overlap
+            y: {
+                beginAtZero: true,
+                min: 0,  // Starting at 0
+                max: 200000,  // Adjust this based on your expected data range
+                ticks: {
+                    stepSize: 20000,  // Define step size for tick marks
+                    autoSkip: true,  // Ensure labels do not overlap
+                },
             },
-          },
         },
         plugins: {
-          legend: {
-            position: 'top',
-          },
+            legend: {
+                position: 'top',
+            },
         },
-      };
-      
+    };
+
 
     const options = {
         responsive: true,
@@ -104,11 +104,11 @@ const Charts = ({data}) => {
             <div className="col-span-2 shadow-md sm:rounded-lg bg-white rounded-md p-6 flex flex-col">
                 <p className="font-semibold mb-6">Unique Submissions vs Duplicate Entries <span id="forYear">for 2025</span></p>
                 <div className="flex-grow">
-                    <Bar data={ barData } options={options} />
+                    <Bar data={ barData } options={ options } />
                 </div>
             </div>
             <div className="shadow-md sm:rounded-lg bg-white rounded-md p-6 flex flex-col">
-                <p className="font-semibold mb-6">Gender Gauge</p>
+                <p className="font-semibold mb-6">Gender Ratio</p>
                 <div className="flex-grow relative">
                     <Pie data={ pieData } options={ {
                         responsive: true,

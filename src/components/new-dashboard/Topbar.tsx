@@ -32,7 +32,7 @@ const Topbar = () => {
                     {/* User */ }
                     <button>
                         <img
-                            src="https://images.pexels.com/photos/7956488/pexels-photo-7956488.jpeg?auto=compress&cs=tinysrgb&w=600"
+                             src="https://images.pexels.com/photos/7956488/pexels-photo-7956488.jpeg?auto=compress&cs=tinysrgb&w=600"
                             alt=""
                             className="h-8 w-8 rounded-full object-cover object-top"
                         />

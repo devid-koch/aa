@@ -1,11 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const AnalyticsCards = ({data}) => {
+const AnalyticsCards = ({ data }) => {
     // const cardsData = [
     //     { label: "Departments", value: 10, icon: "bi-stack", color: "sky" },
     //     { label: "Schemes", value: 9, icon: "bi-stack", color: "purple" },
     //     // Add more card data here
     // ];
+
+    const navigate = useNavigate();
 
     const icons = {
         departments: 'bi-building',    // Example icon class
@@ -20,9 +23,9 @@ const AnalyticsCards = ({data}) => {
         assessors: 'bi-person-check',  // Example icon class
         assessments: 'bi-check-circle', // Example icon class
         placements: 'bi-briefcase',    // Example icon class
-      };
-      
-      const colors = {
+    };
+
+    const colors = {
         departments: 'blue',
         schemes: 'green',
         sectors: 'yellow',
@@ -35,19 +38,21 @@ const AnalyticsCards = ({data}) => {
         assessors: 'brown',
         assessments: 'gray',
         placements: 'cyan',
-      };
+    };
 
     return (
         <div className="grid grid-cols-6 gap-6">
-            {Object.keys(data)?.map((card, index) => (
-                <div key={ index } className="shadow-md sm:rounded-lg bg-white rounded-md p-4 flex items-center gap-4">
+            { Object.keys(data)?.map((card, index) => (
+                <div key={ index } className={ `${card === "candidates" && "cursor-pointer"} shadow-md sm:rounded-lg bg-white rounded-md p-4 flex items-center gap-4` }
+                    onClick={ () => card === "candidates" && navigate("/candidate-details") }
+                >
                     <div className={ `flex-shrink-0 px-3 py-1.5 bg-${colors[card]}-100 rounded-full` }>
-                        <i className={`bi ${icons[card]} text-${colors[card]}-600 text-xs`}></i>
+                        <i className={ `bi ${icons[card]} text-${colors[card]}-600 text-xs` }></i>
                     </div>
                     <div>
-                        {/* <p className="text-xs text-gray-400">{ card.label }</p> */}
-                        <p className="text-xs text-gray-400">{card.charAt(0).toUpperCase() + card.slice(1)}:</p>
-                        <p className="text-sm font-bold">{data[card]}</p>
+                        {/* <p className="text-xs text-gray-400">{ card.label }</p> */ }
+                        <p className="text-xs text-gray-400">{ card.charAt(0).toUpperCase() + card.slice(1) }:</p>
+                        <p className="text-sm font-bold">{ data[card] }</p>
                     </div>
                 </div>
             )) }

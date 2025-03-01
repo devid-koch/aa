@@ -12,39 +12,43 @@ const NewDashboard = () => {
     const [filters, setFilters] = useState({
         integrationType: null,
         departmentId: [],
-        schemeId: [],
+        schemeId: null,
         year: []
     });
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
     };
 
-    console.log(filters);
-    
+    const integrationTypeMapping = {
+        "Manual Upload": 1,
+        "Bulk Upload (xlsx)": 2,
+        "API Integration": 3
+    };
+
+
     const payload = {
-        integrationType: filters.integrationType?.[0] === "Manual Upload" ? [1] :
-                     filters.integrationType?.[0] === "Bulk Upload (xlsx)" ? [2] :
-                     filters.integrationType?.[0] === "API Integration" ? [3] : null,
+        integrationType: filters.integrationType?.map(type => integrationTypeMapping[type]) || [],
         departmentId: filters.departmentId,
-        schemeId: filters.schemeId,
+        schemeId: Array.isArray(filters.schemeId) ? filters.schemeId.flat() : [],
         year: filters.year
     };
-    
-    const { data, isLoading, refetch } = useDashboardData(payload);
 
-    useEffect(()=>{
+
+    const { data, refetch } = useDashboardData(payload);
+
+    useEffect(() => {
         refetch();
-    },[filters])
-    
+    }, [filters])
+
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             <Topbar />
-            <Filters onFilterChange={handleFilterChange} departmentList = {data?.department} />
+            <Filters onFilterChange={ handleFilterChange } departmentList={ data?.department } schemesList={ data?.deptBySchemes } />
             <section className="flex-grow">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid gap-6">
-                        <AnalyticsCards data={data?.count || []} />
-                        <Charts data={data} />
+                        <AnalyticsCards data={ data?.count || [] } />
+                        <Charts data={ data } />
                         <Table />
                     </div>
                 </div>

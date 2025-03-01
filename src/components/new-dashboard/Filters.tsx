@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const Filters = ({ onFilterChange,departmentList }) => {
-    const [selectedIType, setSelectedIType] = useState("Manual Upload");
-    const [selectedDepartment, setSelectedDepartment] = useState("ASDM");
-    const [selectedScheme, setSelectedScheme] = useState("1 selected");
+const Filters = ({ onFilterChange, departmentList, schemesList }) => {
+    const integrationTypes = ["Manual Upload", "Bulk Upload (xlsx)", "API Integration"];
+    const [selectedIType, setSelectedIType] = useState(integrationTypes);
+    const [selectedSchemes, setSelectedSchemes] = useState([]);
     const [selectedYear, setSelectedYear] = useState("1 selected");
     const [openDropdown, setOpenDropdown] = useState(null);
-    const [selectedDepartments, setSelectedDepartments] = useState(["ASDM","Agriculture","SJ&E","Tourism","TA(plain)","TT&AW","Handloom","H&UA",]);
+    const [selectedDepartments, setSelectedDepartments] = useState(["ASDM", "Agriculture", "SJ&E", "Tourism", "TA(plain)", "TT&AW", "Handloom", "H&UA",]);
 
     const handleCheckboxChange = (setter) => (e) => {
         const value = e.target.value;
         setter(value);
+    };
+
+    const handleMultipleCheckboxChange = (value, setter) => {
+        setter((prev) => {
+            if (prev.length === 1 && prev.includes(value)) {
+                return prev;
+            }
+            return prev.includes(value)
+                ? prev.filter((item) => item !== value)
+                : [...prev, value];
+        });
     };
     const handleDropdownToggle = (dropdownId) => {
         setOpenDropdown(openDropdown === dropdownId ? null : dropdownId);
@@ -19,12 +30,23 @@ const Filters = ({ onFilterChange,departmentList }) => {
 
     useEffect(() => {
         onFilterChange({
-            integrationType: [selectedIType],
+            integrationType: selectedIType,
             departmentId: selectedDepartments,
-            schemeId: [selectedScheme],
+            schemeId: [selectedSchemes],
             year: [selectedYear]
         });
-    }, [selectedIType, selectedDepartments, selectedScheme, selectedYear]);
+    }, [selectedIType, selectedDepartments, selectedSchemes, selectedYear]);
+
+    const handleIntregationTypeCheckboxChange = (value) => {
+        setSelectedIType((prev) => {
+            if (prev.length === 1 && prev.includes(value)) {
+                return prev;
+            }
+            return prev.includes(value)
+                ? prev.filter((item) => item !== value)
+                : [...prev, value];
+        });
+    };
 
     // const handleDepartmentCheckboxChange = (departmentName) => {
     //     setSelectedDepartments((prevSelected) => {
@@ -36,25 +58,25 @@ const Filters = ({ onFilterChange,departmentList }) => {
     //     });
     //   };
 
-    
-      const handleDepartmentCheckboxChange = (departmentName) => {
+
+    const handleDepartmentCheckboxChange = (departmentName) => {
         setSelectedDepartments((prevSelected) => {
-          if (prevSelected.includes(departmentName)) {
-            return prevSelected.filter(name => name !== departmentName); // Deselect if already selected
-          } else {
-            return [...prevSelected, departmentName]; // Select if not already selected
-          }
+            if (prevSelected.includes(departmentName)) {
+                return prevSelected.filter(name => name !== departmentName); // Deselect if already selected
+            } else {
+                return [...prevSelected, departmentName]; // Select if not already selected
+            }
         });
-      };
+    };
 
     const isAllSelected = selectedDepartments?.length === departmentList?.length;
     const handleSelectAll = () => {
         if (selectedDepartments.length === departmentList.length) {
-          setSelectedDepartments(["ASDM"]);
+            setSelectedDepartments(["ASDM"]);
         } else {
-          setSelectedDepartments(departmentList.map(item => item.departmentName));
+            setSelectedDepartments(departmentList.map(item => item.departmentName));
         }
-      };
+    };
 
     return (
         <div className="border-b my-5">
@@ -73,52 +95,36 @@ const Filters = ({ onFilterChange,departmentList }) => {
                     {/* Integration Type */ }
                     <div className="relative">
                         <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterIType"
-                            onClick={() => handleDropdownToggle('integration')}>
+                            onClick={ () => handleDropdownToggle('integration') }>
                             <p className="text-gray-600">Integration Type</p>
                             <input
                                 type="text"
                                 className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none"
-                                value={ selectedIType }
+                                value={ selectedIType.join(", ") }
                                 readOnly
                             />
                             <i className="bi bi-chevron-down"></i>
                         </div>
-                        {openDropdown === 'integration' && (
-                        <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
-                            <ul>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="Manual Upload"
-                                        checked={ selectedIType === "Manual Upload" }
-                                        onChange={ handleCheckboxChange(setSelectedIType) }
-                                    />{ " " }
-                                    Manual Upload
-                                </li>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="Bulk Upload (xlsx)"
-                                        checked={ selectedIType === "Bulk Upload (xlsx)" }
-                                        onChange={ handleCheckboxChange(setSelectedIType) }
-                                    />{ " " }
-                                    Bulk Upload (xlsx)
-                                </li>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="API Integration"
-                                        checked={ selectedIType === "API Integration" }
-                                        onChange={ handleCheckboxChange(setSelectedIType) }
-                                    />{ " " }
-                                    API Integration
-                                </li>
-                            </ul>
-                        </div>
-                        )}
+                        { openDropdown === 'integration' && (
+                            <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
+                                <ul>
+                                    { integrationTypes.map((type) => (
+                                        <li key={ type } className="py-1 px-3 items-center flex gap-1">
+                                            <input
+                                                type="checkbox"
+                                                value={ type }
+                                                checked={ selectedIType.includes(type) }
+                                                onChange={ () => handleIntregationTypeCheckboxChange(type) }
+                                            />
+                                            { type }
+                                        </li>
+                                    )) }
+                                </ul>
+                            </div>
+                        ) }
                     </div>
                     <div className="relative">
-                        <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterDepartment" onClick={() => handleDropdownToggle('department')}>
+                        <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterDepartment" onClick={ () => handleDropdownToggle('department') }>
                             <p className="text-gray-600">Department</p>
                             <input
                                 type="text"
@@ -128,64 +134,66 @@ const Filters = ({ onFilterChange,departmentList }) => {
                             />
                             <i className="bi bi-chevron-down"></i>
                         </div>
-                        {openDropdown === 'department' && (
-                        <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
-                            <ul>
-                                <li key="all" className="py-1 px-3 items-center flex gap-1">
-                                <input
-                                    type="checkbox"
-                                    checked={isAllSelected}
-                                    onChange={handleSelectAll}
-                                />
-                                All
-                                </li>
-                                {departmentList?.map((item,index)=>{
-                                    return (
-                                <li key={index} className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value={item.departmentName}
-                                        checked={selectedDepartments.includes(item.departmentName)}
-                                        onChange={ ()=>handleDepartmentCheckboxChange(item.departmentName) }
-                                    />{ " " }
-                                    {item?.departmentName}
-                                </li>
-                                    )
-                                })}
-                            </ul>
-                        </div>
-                        )}
+                        { openDropdown === 'department' && (
+                            <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
+                                <ul>
+                                    <li key="all" className="py-1 px-3 items-center flex gap-1">
+                                        <input
+                                            type="checkbox"
+                                            checked={ isAllSelected }
+                                            onChange={ handleSelectAll }
+                                        />
+                                        All
+                                    </li>
+                                    { departmentList?.map((item, index) => {
+                                        return (
+                                            <li key={ index } className="py-1 px-3 items-center flex gap-1">
+                                                <input
+                                                    type="checkbox"
+                                                    value={ item.departmentName }
+                                                    checked={ selectedDepartments.includes(item.departmentName) }
+                                                    onChange={ () => handleDepartmentCheckboxChange(item.departmentName) }
+                                                />{ " " }
+                                                { item?.departmentName }
+                                            </li>
+                                        )
+                                    }) }
+                                </ul>
+                            </div>
+                        ) }
                     </div>
                     <div className="relative">
-                        <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterScheme" onClick={() => handleDropdownToggle('scheme')}>
+                        <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterScheme" onClick={ () => handleDropdownToggle('scheme') }>
                             <p className="text-gray-600">Scheme</p>
                             <input
                                 type="text"
-                                className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none"
-                                value={ selectedScheme }
+                                className="w-24 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none"
+                                value={ selectedSchemes }
                                 readOnly
                             />
                             <i className="bi bi-chevron-down"></i>
                         </div>
-                        {openDropdown === 'scheme' && (
-                        <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
-                            <ul>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="pm-ajay"
-                                        checked={ selectedScheme === "pm-ajay" }
-                                        onChange={ handleCheckboxChange(setSelectedScheme) }
-                                    />{ " " }
-                                    PM-AJAY
-                                </li>
-                            </ul>
-                        </div>
-                        )}
+                        { openDropdown === 'scheme' && (
+                            <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
+                                <ul>
+                                    { schemesList?.map((item, index) => (
+                                        <li key={ index } className="py-1 px-3 items-center flex gap-1">
+                                            <input
+                                                type="checkbox"
+                                                value={ item?.schemeName }
+                                                checked={ selectedSchemes.includes(item?.schemeName) }
+                                                onChange={ () => handleMultipleCheckboxChange(item?.schemeName, setSelectedSchemes) }
+                                            />
+                                            { item?.schemeName }
+                                        </li>
+                                    )) }
+                                </ul>
+                            </div>
+                        ) }
                     </div>
                     <div className="relative">
-                        <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterYear" onClick={() => handleDropdownToggle('year')}>
-                            <p className="text-gray-600">Year</p>
+                        <div className="border rounded-md p-2 flex gap-2 text-xs" id="filterYear" onClick={ () => handleDropdownToggle('year') }>
+                            <p className="text-gray-600">Scheme Year</p>
                             <input
                                 type="text"
                                 className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none"
@@ -194,39 +202,39 @@ const Filters = ({ onFilterChange,departmentList }) => {
                             />
                             <i className="bi bi-chevron-down"></i>
                         </div>
-                        {openDropdown === 'year' && (
-                        <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
-                            <ul>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="2025"
-                                        checked={ selectedYear === "2025" }
-                                        onChange={ handleCheckboxChange(setSelectedYear) }
-                                    />{ " " }
-                                    2025
-                                </li>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="2024"
-                                        checked={ selectedYear === "2024" }
-                                        onChange={ handleCheckboxChange(setSelectedYear) }
-                                    />{ " " }
-                                    2024
-                                </li>
-                                <li className="py-1 px-3 items-center flex gap-1">
-                                    <input
-                                        type="checkbox"
-                                        value="2023"
-                                        checked={ selectedYear === "2023" }
-                                        onChange={ handleCheckboxChange(setSelectedYear) }
-                                    />{ " " }
-                                    2023
-                                </li>
-                            </ul>
-                        </div>
-                        )}
+                        { openDropdown === 'year' && (
+                            <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
+                                <ul>
+                                    <li className="py-1 px-3 items-center flex gap-1">
+                                        <input
+                                            type="checkbox"
+                                            value="2025"
+                                            checked={ selectedYear === "2025" }
+                                            onChange={ handleCheckboxChange(setSelectedYear) }
+                                        />{ " " }
+                                        2025
+                                    </li>
+                                    <li className="py-1 px-3 items-center flex gap-1">
+                                        <input
+                                            type="checkbox"
+                                            value="2024"
+                                            checked={ selectedYear === "2024" }
+                                            onChange={ handleCheckboxChange(setSelectedYear) }
+                                        />{ " " }
+                                        2024
+                                    </li>
+                                    <li className="py-1 px-3 items-center flex gap-1">
+                                        <input
+                                            type="checkbox"
+                                            value="2023"
+                                            checked={ selectedYear === "2023" }
+                                            onChange={ handleCheckboxChange(setSelectedYear) }
+                                        />{ " " }
+                                        2023
+                                    </li>
+                                </ul>
+                            </div>
+                        ) }
                     </div>
                 </div>
             </div>
