@@ -54,12 +54,16 @@ const ListDetails = () => {
         skip: 0
     } : null
 
-    const { data, refetch, isLoading } = payload ? useDashboardData<ListData>("card-wise-data", payload) : { data: null, refetch: () => { } };
+    const { data, refetch, isLoading } = useDashboardData<ListData>("card-wise-data", payload);
+
+    useEffect(() => {
+        refetch();
+    }, [filters])
 
 
-    if (isLoading) {
-        return <Loader />
-    }
+    // if (isLoading) {
+    //     return <Loader />
+    // }
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
@@ -230,29 +234,39 @@ const ListDetails = () => {
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            { Array.isArray(data?.list) && data?.list?.length > 0 ?
-                                                (data?.list?.map((item, index) => (
-                                                    <tr className="bg-white border-b hover:bg-gray-50">
-                                                        <td className="px-4 py-3 text-center">{ index + 1 }</td>
-                                                        <td className="px-4 py-3 text-center">{ item?.candidateId ?? "N/A" }</td>
-                                                        <td className="px-4 py-3">{ item?.vsCandidateName ?? "N/A" }</td>
-                                                        <td className="px-4 py-3 text-center">{ dayjs(item?.vsDOB).format("YYYY-MM-DD") ?? "N/A" }</td>
-                                                        <td className="px-4 py-3 text-center">{ item?.caste ?? "N/A" }</td>
-                                                        <td className="px-4 py-3 text-center">{ item?.vsGender ?? "N/A" }</td>
-                                                        <td className="px-4 py-3 text-center">{ item?.vsMobile ?? "N/A" }</td>
-                                                        <td className="px-4 py-3 text-center">{ item?.departmentName ?? "N/A" }</td>
-                                                        <td className="px-4 py-3 text-center">
-                                                            <a href="" className="text-blue-600 hover:underline">View</a>
-                                                        </td>
-                                                    </tr>
-                                                ))
-                                                ) : (
-                                                    <tr>
-                                                        <td colSpan={ 9 } className="px-4 py-3 text-center text-gray-500">No Data Found</td>
-                                                    </tr>
-                                                ) }
-                                        </tbody>
+
+                                        { isLoading ?
+                                            <tbody>
+                                                <tr>
+                                                    <td colSpan={ 9 } className="px-4 py-3 text-center text-gray-500">Loading...</td>
+                                                </tr>
+                                            </tbody>
+                                            :
+                                            <tbody>
+                                                { Array.isArray(data?.list) && data?.list?.length > 0 ?
+                                                    (data?.list?.map((item, index) => (
+                                                        <tr className="bg-white border-b hover:bg-gray-50">
+                                                            <td className="px-4 py-3 text-center">{ index + 1 }</td>
+                                                            <td className="px-4 py-3 text-center">{ item?.candidateId ?? "N/A" }</td>
+                                                            <td className="px-4 py-3">{ item?.vsCandidateName ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ dayjs(item?.vsDOB).format("YYYY-MM-DD") ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ item?.caste ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ item?.vsGender ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ item?.vsMobile ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ item?.departmentName ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">
+                                                                <a href="" className="text-blue-600 hover:underline">View</a>
+                                                            </td>
+                                                        </tr>
+                                                    ))
+                                                    ) : (
+                                                        <tr>
+                                                            <td colSpan={ 9 } className="px-4 py-3 text-center text-gray-500">No Data Found</td>
+                                                        </tr>
+                                                    ) }
+                                            </tbody>
+                                        }
+
                                     </table>
                                 </div>
                                 {/* Table pagination */ }
