@@ -1,43 +1,76 @@
+import dayjs from "dayjs";
+import useDashboardData from "../../hooks/useDashboardData";
+import Loader from "../loader/loader";
+import Topbar from "./Topbar";
+import { Link } from "react-router-dom";
+import { ListData } from "../../types/types";
+import Footer from "./Footer";
+import Filters from "./Filters";
+import { useEffect, useRef, useState } from "react";
+
 const ListDetails = () => {
+
+    const storedDepartments = JSON.parse(localStorage.getItem("departmentList"));
+    const storedSchemes = JSON.parse(localStorage.getItem("schemeList"));
+
+    const schemeNamesArray = storedSchemes?.map(item => item?.schemeName);
+    const departmentNamesArray = storedDepartments.map(item => item?.departmentName);
+
+    const [filters, setFilters] = useState({
+        data_type: [],
+        card: [],
+        departmentId: departmentNamesArray ?? [],
+        integrationType: [],
+        schemeId: schemeNamesArray ?? []
+    });
+
+
+    const handleFilterChange = (newFilters) => {
+        setFilters(newFilters);
+    };
+
+    const integrationTypeMapping = {
+        "Manual Upload": 1,
+        "Bulk Upload (xlsx)": 2,
+        "API Integration": 3
+    };
+
+
+    // const payload = filters ? {
+    //     integrationType: filters.integrationType?.map(type => integrationTypeMapping[type]) || [],
+    //     departmentId: filters.departmentId,
+    //     schemeName: Array.isArray(filters.schemeId) ? filters.schemeId.flat() : [],
+    //     year: filters.year
+    // } : null;
+
+
+    const payload = filters ? {
+        data_type: "",
+        card: "candidate",
+        departmentId: filters.departmentId.length ? filters.departmentId : departmentNamesArray,
+        integrationType: filters.integrationType?.map(type => integrationTypeMapping[type]).length ? filters.integrationType?.map(type => integrationTypeMapping[type]) : [1, 2, 3],
+        schemeName: Array.isArray(filters.schemeId) ? filters.schemeId.flat() : schemeNamesArray,
+        take: 10,
+        skip: 0
+    } : null
+
+    const { data, refetch, isLoading } = payload ? useDashboardData<ListData>("card-wise-data", payload) : { data: null, refetch: () => { } };
+
+
+    if (isLoading) {
+        return <Loader />
+    }
+
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             {/* {/* Topbar */ }
-            <section className="">
-                <div className="max-w-7xl mx-auto flex gap-4 items-center justify-between">
-                    {/* {/* Logo & Name */ }
-                    <div className="flex gap-2 items-center py-2">
-                        <img src="https://convergence.skillmissionassam.org/assets/ASDM_logo-eefc391c.png" alt="" className="h-16" />
-                        <div className="">
-                            <h1 className="text-xl font-semibold">Assam Skill Development Mission</h1>
-                            <p className="text-gray-500">Convergence Dashboard</p>
-                        </div>
-                    </div>
-                    {/* {/* Options */ }
-                    <div className="flex gap-2">
-                        {/* {/* Current Date */ }
-                        <div className="border rounded-md p-2 flex gap-2 text-xs">
-                            <i className="bi bi-calendar-week"></i>
-                            <p className="text-gray-600">Feb 20, 2025</p>
-                        </div>
-                        {/* Theme Changer */ }
-                        <label htmlFor="themeChanger" className="border rounded-md p-2 flex gap-2 text-xs cursor-pointer">
-                            <input type="checkbox" className="peer/theme hidden" id="themeChanger" />
-                            <i className="bi bi-brightness-high peer-checked/theme:hidden"></i>
-                            <i className="bi bi-moon hidden peer-checked/theme:block"></i>
-                        </label>
-                        {/* User */ }
-                        <button className="">
-                            <img src="https://images.pexels.com/photos/7956488/pexels-photo-7956488.jpeg?auto=compress&cs=tinysrgb&w=600" alt="" className="h-8 w-8 rounded-full object-cover object-top" />
-                        </button>
-                    </div>
-                </div>
-            </section>
+            <Topbar />
 
             {/* Breadcrumb */ }
             <div className="">
                 <div className="max-w-7xl mx-auto py-2">
                     <div className="flex items-center gap-2">
-                        <a href="./Dashboard.html" className="text-gray-500 text-xs hover:underline">Dashboard</a> <i className="bi bi-chevron-right text-gray-600 text-xs"></i> <p className="text-xs">Department-wise Training Program Analysis – Batch Summary</p>
+                        <Link to="/" className="text-gray-500 text-xs hover:underline">Dashboard</Link> <i className="bi bi-chevron-right text-gray-600 text-xs"></i> <p className="text-xs">Department-wise Training Program Analysis – Batch Summary</p>
                     </div>
                 </div>
             </div>
@@ -45,124 +78,9 @@ const ListDetails = () => {
             {/* Content */ }
             <section className="flex-grow">
                 {/* Search & Filter */ }
-                <div className="border-b mt-10">
-                    <div className="max-w-7xl mx-auto py-2 flex gap-4 items-center justify-between">
-                        {/* Search */ }
-                        <div className="relative">
-                            <input type="text" className="pl-8 border-none focus:border-none focus:ring-0 text-xs bg-transparent" placeholder="Search htmlFor something" />
-                            <i className="bi bi-search absolute top-1/2 left-0 -translate-y-1/2 text-gray-800"></i>
-                        </div>
-                        {/* Filters */ }
-                        <div className="flex gap-2 flex-nowrap">
 
-                            {/* Integration Type */ }
-                            <button className="relative flex-shrink-0">
-                                <div className="border rounded-md p-1.5 flex gap-2 text-xs" id="filterIType">
-                                    <p className="text-gray-600">Integration Type</p>
-                                    <input type="text" className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none" id="selectedIType" value="Manual Upload" />
-                                    <i className="bi bi-chevron-down text-[.6rem]"></i>
-                                </div>
-                                <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md hidden max-h-96 overflow-y-auto" id="dropIType">
-                                    <ul>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="iType-checkbox" value="Manual Upload" checked /> Manual Upload
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="iType-checkbox" value="Bulk Upload (xlsx)" /> Bulk Upload (xlsx)
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="iType-checkbox" value="API Integration" /> API Integration
-                                        </li>
-                                    </ul>
-                                </div>
-                            </button>
+                <Filters onFilterChange={ handleFilterChange } departmentList={ storedDepartments } schemesList={ storedSchemes } />
 
-                            {/* Department */ }
-                            <button className="relative flex-shrink-0">
-                                <div className="border rounded-md p-1.5 flex gap-2 text-xs" id="filterDepartment">
-                                    <p className="text-gray-600">Department</p>
-                                    <input type="text" className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none" id="selectedDepartment" value="3 selected" />
-                                    <i className="bi bi-chevron-down text-[.6rem]"></i>
-                                </div>
-                                <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md hidden max-h-96 overflow-y-auto" id="dropDepartment">
-                                    <ul>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="department-checkbox" value="Agriculture" checked /> Agriculture
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="department-checkbox" value="Health" checked /> Health
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="department-checkbox" value="Tourism" /> Tourism
-                                        </li>
-                                    </ul>
-                                </div>
-                            </button>
-
-                            {/* Scheme */ }
-                            <button className="relative flex-shrink-0">
-                                <div className="border rounded-md p-1.5 flex gap-2 text-xs" id="filterScheme">
-                                    <p className="text-gray-600">Scheme</p>
-                                    <input type="text" className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none" id="selectedScheme" value="1 selected" readOnly />
-                                    <i className="bi bi-chevron-down text-[.6rem]"></i>
-                                </div>
-                                <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md hidden max-h-96 overflow-y-auto" id="dropScheme">
-                                    <ul>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="scheme-checkbox" value="DAY-NULM" checked /> DAY-NULM
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="scheme-checkbox" value="Divyangjan Scheme" checked /> Divyangjan Scheme
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="scheme-checkbox" value="JJM-RPL" checked /> JJM-RPL
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="scheme-checkbox" value="PLSDTP" checked /> PLSDTP
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="scheme-checkbox" value="PLSDTP-KSK" checked /> PLSDTP-KSK
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="scheme-checkbox" value="PM-AJAY" checked /> PM-AJAY
-                                        </li>
-                                    </ul>
-                                </div>
-                            </button>
-
-                            {/* Year */ }
-                            <button className="relative flex-shrink-0">
-                                <div className="border rounded-md p-1.5 flex gap-2 text-xs" id="filterYear">
-                                    <p className="text-gray-600">Year</p>
-                                    <input type="text" className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none" id="selectedYear" value="1 selected" readOnly />
-                                    <i className="bi bi-chevron-down text-[.6rem]"></i>
-                                </div>
-                                <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md hidden max-h-96 overflow-y-auto" id="dropYear">
-                                    <ul>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="year-checkbox" value="2025" checked /> 2025
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="year-checkbox" value="2024" /> 2024
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="year-checkbox" value="2023" /> 2023
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="year-checkbox" value="2022" /> 2022
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="year-checkbox" value="2021" /> 2021
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="year-checkbox" value="2020" /> 2020
-                                        </li>
-                                    </ul>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Extra Filters */ }
                 <div className="border-b">
@@ -313,169 +231,34 @@ const ListDetails = () => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">1</td>
-                                                <td className="px-4 py-3 text-center">A12345</td>
-                                                <td className="px-4 py-3">Rahul Sharma</td>
-                                                <td className="px-4 py-3 text-center">1992-05-14</td>
-                                                <td className="px-4 py-3 text-center">General</td>
-                                                <td className="px-4 py-3 text-center">Male</td>
-                                                <td className="px-4 py-3 text-center">9876543210</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">2</td>
-                                                <td className="px-4 py-3 text-center">B67890</td>
-                                                <td className="px-4 py-3">Priya Verma</td>
-                                                <td className="px-4 py-3 text-center">1995-09-21</td>
-                                                <td className="px-4 py-3 text-center">OBC</td>
-                                                <td className="px-4 py-3 text-center">Female</td>
-                                                <td className="px-4 py-3 text-center">9871234567</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">3</td>
-                                                <td className="px-4 py-3 text-center">C54321</td>
-                                                <td className="px-4 py-3">Amit Kumar</td>
-                                                <td className="px-4 py-3 text-center">1990-07-10</td>
-                                                <td className="px-4 py-3 text-center">SC</td>
-                                                <td className="px-4 py-3 text-center">Male</td>
-                                                <td className="px-4 py-3 text-center">9812345678</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">4</td>
-                                                <td className="px-4 py-3 text-center">D98765</td>
-                                                <td className="px-4 py-3">Sneha Gupta</td>
-                                                <td className="px-4 py-3 text-center">1994-03-18</td>
-                                                <td className="px-4 py-3 text-center">ST</td>
-                                                <td className="px-4 py-3 text-center">Female</td>
-                                                <td className="px-4 py-3 text-center">9823456789</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">5</td>
-                                                <td className="px-4 py-3 text-center">E13579</td>
-                                                <td className="px-4 py-3">Vikram Singh</td>
-                                                <td className="px-4 py-3 text-center">1988-11-30</td>
-                                                <td className="px-4 py-3 text-center">General</td>
-                                                <td className="px-4 py-3 text-center">Male</td>
-                                                <td className="px-4 py-3 text-center">9890123456</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">6</td>
-                                                <td className="px-4 py-3 text-center">F24680</td>
-                                                <td className="px-4 py-3">Meera Das</td>
-                                                <td className="px-4 py-3 text-center">1997-06-25</td>
-                                                <td className="px-4 py-3 text-center">OBC</td>
-                                                <td className="px-4 py-3 text-center">Female</td>
-                                                <td className="px-4 py-3 text-center">9845678901</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">7</td>
-                                                <td className="px-4 py-3 text-center">G11223</td>
-                                                <td className="px-4 py-3">Anil Yadav</td>
-                                                <td className="px-4 py-3 text-center">1989-08-15</td>
-                                                <td className="px-4 py-3 text-center">SC</td>
-                                                <td className="px-4 py-3 text-center">Male</td>
-                                                <td className="px-4 py-3 text-center">9876001234</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">8</td>
-                                                <td className="px-4 py-3 text-center">H55678</td>
-                                                <td className="px-4 py-3">Kavita Sen</td>
-                                                <td className="px-4 py-3 text-center">1993-01-05</td>
-                                                <td className="px-4 py-3 text-center">ST</td>
-                                                <td className="px-4 py-3 text-center">Female</td>
-                                                <td className="px-4 py-3 text-center">9834567890</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">9</td>
-                                                <td className="px-4 py-3 text-center">I99887</td>
-                                                <td className="px-4 py-3">Rajesh Pillai</td>
-                                                <td className="px-4 py-3 text-center">1987-12-12</td>
-                                                <td className="px-4 py-3 text-center">General</td>
-                                                <td className="px-4 py-3 text-center">Male</td>
-                                                <td className="px-4 py-3 text-center">9876509876</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">10</td>
-                                                <td className="px-4 py-3 text-center">J33445</td>
-                                                <td className="px-4 py-3">Sonia Dutta</td>
-                                                <td className="px-4 py-3 text-center">1998-04-22</td>
-                                                <td className="px-4 py-3 text-center">OBC</td>
-                                                <td className="px-4 py-3 text-center">Female</td>
-                                                <td className="px-4 py-3 text-center">9801122334</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">11</td>
-                                                <td className="px-4 py-3 text-center">K77889</td>
-                                                <td className="px-4 py-3">Rohan Mehta</td>
-                                                <td className="px-4 py-3 text-center">1991-07-19</td>
-                                                <td className="px-4 py-3 text-center">General</td>
-                                                <td className="px-4 py-3 text-center">Male</td>
-                                                <td className="px-4 py-3 text-center">9812233445</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
-                                            <tr className="bg-white border-b hover:bg-gray-50">
-                                                <td className="px-4 py-3 text-center">12</td>
-                                                <td className="px-4 py-3 text-center">L11223</td>
-                                                <td className="px-4 py-3">Neha Kapoor</td>
-                                                <td className="px-4 py-3 text-center">1996-10-08</td>
-                                                <td className="px-4 py-3 text-center">OBC</td>
-                                                <td className="px-4 py-3 text-center">Female</td>
-                                                <td className="px-4 py-3 text-center">9877654321</td>
-                                                <td className="px-4 py-3 text-center">Agriculture</td>
-                                                <td className="px-4 py-3 text-center">
-                                                    <a href="" className="text-blue-600 hover:underline">View</a>
-                                                </td>
-                                            </tr>
+                                            { Array.isArray(data?.list) && data?.list?.length > 0 ?
+                                                (data?.list?.map((item, index) => (
+                                                    <tr className="bg-white border-b hover:bg-gray-50">
+                                                        <td className="px-4 py-3 text-center">{ index + 1 }</td>
+                                                        <td className="px-4 py-3 text-center">{ item?.candidateId ?? "N/A" }</td>
+                                                        <td className="px-4 py-3">{ item?.vsCandidateName ?? "N/A" }</td>
+                                                        <td className="px-4 py-3 text-center">{ dayjs(item?.vsDOB).format("YYYY-MM-DD") ?? "N/A" }</td>
+                                                        <td className="px-4 py-3 text-center">{ item?.caste ?? "N/A" }</td>
+                                                        <td className="px-4 py-3 text-center">{ item?.vsGender ?? "N/A" }</td>
+                                                        <td className="px-4 py-3 text-center">{ item?.vsMobile ?? "N/A" }</td>
+                                                        <td className="px-4 py-3 text-center">{ item?.departmentName ?? "N/A" }</td>
+                                                        <td className="px-4 py-3 text-center">
+                                                            <a href="" className="text-blue-600 hover:underline">View</a>
+                                                        </td>
+                                                    </tr>
+                                                ))
+                                                ) : (
+                                                    <tr>
+                                                        <td colSpan={ 9 } className="px-4 py-3 text-center text-gray-500">No Data Found</td>
+                                                    </tr>
+                                                ) }
                                         </tbody>
                                     </table>
                                 </div>
                                 {/* Table pagination */ }
                                 <div className="flex items-center justify-between gap-4 mt-2">
                                     <div className="">
-                                        <p className="text-xs text-gray-500">Showing 1-12 of 177 records</p>
+                                        <p className="text-xs text-gray-500">Showing 1-12 of { data?.total } records</p>
                                     </div>
                                     <div className="border rounded-md divide-x flex text-xs">
                                         <a href="" className="py-1.5 px-3 block pointer-events-none cursor-not-allowed bg-gray-200"><i className="bi bi-chevron-left text-xs"></i></a>
@@ -493,11 +276,7 @@ const ListDetails = () => {
             </section>
 
             {/* Footer */ }
-            <section className="mt-auto border-t">
-                <div className="max-w-7xl mx-auto py-4">
-                    <p className="text-xs text-center text-gray-500 font-light">Copyright &copy; 2024 Assam Skill Development Mission | All Rights Reserved</p>
-                </div>
-            </section>
+            <Footer />
 
         </div>
     )

@@ -7,12 +7,14 @@ import Footer from "./Footer";
 import Table from "./Table";
 import Topbar from "./Topbar";
 import "./style.css"
+import Loader from "../loader/loader";
+import { DashboardData } from "../../types/types";
 
 const NewDashboard = () => {
     const [filters, setFilters] = useState({
-        integrationType: null,
+        integrationType: [],
         departmentId: [],
-        schemeId: null,
+        schemeId: [],
         year: []
     });
     const handleFilterChange = (newFilters) => {
@@ -26,19 +28,29 @@ const NewDashboard = () => {
     };
 
 
-    const payload = {
+    const payload = filters ? {
         integrationType: filters.integrationType?.map(type => integrationTypeMapping[type]) || [],
         departmentId: filters.departmentId,
-        schemeId: Array.isArray(filters.schemeId) ? filters.schemeId.flat() : [],
+        schemeName: Array.isArray(filters.schemeId) ? filters.schemeId.flat() : [],
         year: filters.year
-    };
+    } : null;
 
+    const { data, refetch } = payload ? useDashboardData<DashboardData>("home", payload) : { data: null, refetch: () => { } }
 
-    const { data, refetch } = useDashboardData(payload);
+    //save the department list and scheme list in local storage
+    useEffect(() => {
+        if (data?.department) {
+            localStorage.setItem("departmentList", JSON.stringify(data.department));
+        }
+        if (data?.deptBySchemes) {
+            localStorage.setItem("schemeList", JSON.stringify(data.deptBySchemes));
+        }
+    }, [data]);
 
     useEffect(() => {
         refetch();
     }, [filters])
+
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">

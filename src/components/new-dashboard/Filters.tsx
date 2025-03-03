@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-const Filters = ({ onFilterChange, departmentList, schemesList }) => {
+const Filters = ({ onFilterChange, departmentList = [], schemesList = [] }: {
+    onFilterChange: (newFilters: any) => void;
+    departmentList?: any[];
+    schemesList?: any[];
+}) => {
+    const storedDepartments = JSON.parse(localStorage.getItem("departmentList")) || [];
+    const storedSchemes = JSON.parse(localStorage.getItem("schemeList")) || [];
+
+    const departments = departmentList?.length ? departmentList : storedDepartments;
+    const schemes = schemesList?.length ? schemesList : storedSchemes;
+
+    const schemeNamesArray = schemes?.map(item => item?.schemeName);
+    const departmentNamesArray = departments.map(item => item?.departmentName);
+
+
     const integrationTypes = ["Manual Upload", "Bulk Upload (xlsx)", "API Integration"];
     const [selectedIType, setSelectedIType] = useState(integrationTypes);
-    const [selectedSchemes, setSelectedSchemes] = useState([]);
+    const [selectedSchemes, setSelectedSchemes] = useState(schemeNamesArray);
     const [selectedYear, setSelectedYear] = useState("1 selected");
     const [openDropdown, setOpenDropdown] = useState(null);
-    const [selectedDepartments, setSelectedDepartments] = useState(["ASDM", "Agriculture", "SJ&E", "Tourism", "TA(plain)", "TT&AW", "Handloom", "H&UA",]);
+    const [selectedDepartments, setSelectedDepartments] = useState(departmentNamesArray);
+
 
     const handleCheckboxChange = (setter) => (e) => {
         const value = e.target.value;
@@ -145,7 +160,7 @@ const Filters = ({ onFilterChange, departmentList, schemesList }) => {
                                         />
                                         All
                                     </li>
-                                    { departmentList?.map((item, index) => {
+                                    { departments?.map((item, index) => {
                                         return (
                                             <li key={ index } className="py-1 px-3 items-center flex gap-1">
                                                 <input
@@ -176,7 +191,7 @@ const Filters = ({ onFilterChange, departmentList, schemesList }) => {
                         { openDropdown === 'scheme' && (
                             <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md">
                                 <ul>
-                                    { schemesList?.map((item, index) => (
+                                    { schemes?.map((item, index) => (
                                         <li key={ index } className="py-1 px-3 items-center flex gap-1">
                                             <input
                                                 type="checkbox"
