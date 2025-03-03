@@ -40,6 +40,8 @@ interface Candidate {
   vsQualification: string | null;
   batchNo: string;
   courseName: string | null;
+  batchStartDate: string | null;
+  batchEndDate: string | null;
   vsSchemeName: string;
   departmentName: string;
 }

@@ -16,6 +16,16 @@ const ListDetails = () => {
     const schemeNamesArray = storedSchemes?.map(item => item?.schemeName);
     const departmentNamesArray = storedDepartments.map(item => item?.departmentName);
 
+    const [entryType, setEntryType] = useState("all");
+    const [openDropdown, setOpenDropdown] = useState(null);
+
+    const handleDropdownToggle = (dropdownId) => {
+        setOpenDropdown(openDropdown === dropdownId ? null : dropdownId);
+    };
+
+
+    const entryTypeList = ["all", "duplicate"];
+
     const [filters, setFilters] = useState({
         data_type: [],
         card: [],
@@ -24,6 +34,10 @@ const ListDetails = () => {
         schemeId: schemeNamesArray ?? []
     });
 
+
+    const handleCheckboxEntryTypeChange =(value)=>{
+        setEntryType(value);
+    }
 
     const handleFilterChange = (newFilters) => {
         setFilters(newFilters);
@@ -45,7 +59,7 @@ const ListDetails = () => {
 
 
     const payload = filters ? {
-        data_type: "",
+        data_type: entryType=== "all" ? "" : "duplicate",
         card: "candidate",
         departmentId: filters.departmentId.length ? filters.departmentId : departmentNamesArray,
         integrationType: filters.integrationType?.map(type => integrationTypeMapping[type]).length ? filters.integrationType?.map(type => integrationTypeMapping[type]) : [1, 2, 3],
@@ -58,7 +72,7 @@ const ListDetails = () => {
 
     useEffect(() => {
         refetch();
-    }, [filters])
+    }, [filters, entryType])
 
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
@@ -89,21 +103,22 @@ const ListDetails = () => {
 
                             {/* Unique/Duplicate */ }
                             <button className="relative">
-                                <div className="border rounded-md p-1.5 flex gap-2 text-xs" id="filterEntryType">
+                                <div onClick={ () => handleDropdownToggle('entryType') } className="border rounded-md p-1.5 flex gap-2 text-xs" id="filterEntryType">
                                     <p className="text-gray-600">Entry Type</p>
-                                    <input type="text" className="w-16 truncate text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none" id="selectedEntryType" value="1 selected" readOnly />
+                                    <input type="text" className="w-16 truncate capitalize text-orange-600 font-medium text-left bg-transparent text-xs border-0 p-0 pointer-events-none" id="selectedEntryType" value={ entryType || "All" } readOnly />
                                     <i className="bi bi-chevron-down text-[.6rem]"></i>
                                 </div>
-                                <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md hidden max-h-96 overflow-y-auto" id="dropEntryType">
-                                    <ul>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="entry-checkbox" value="5th Pass" checked /> Unique
-                                        </li>
-                                        <li className="py-1 px-3 items-center flex gap-1">
-                                            <input type="checkbox" className="entry-checkbox" value="6th Pass" checked /> Duplicate
-                                        </li>
-                                    </ul>
-                                </div>
+                                { openDropdown === 'entryType' && (
+                                    <div className="absolute border rounded-md p-2 text-xs mt-1 top-full left-0 text-left w-full z-10 bg-white shadow-md max-h-96 overflow-y-auto" id="dropEntryType">
+                                        <ul>
+                                            { entryTypeList?.map((item, index) => (
+                                                <li key={ index } value={item} className="py-1 capitalize px-3 items-center flex gap-1" onClick={()=>handleCheckboxEntryTypeChange(item)}>
+                                                    <input type="checkbox" name="entryType" className="entry-checkbox" checked={entryType === item} value={ item } /> { item }
+                                                </li>
+                                            )) }
+                                        </ul>
+                                    </div>
+                                ) }
                             </button>
 
 
@@ -219,12 +234,13 @@ const ListDetails = () => {
                                         <thead className="text-xs text-gray-700 uppercase bg-gray-100 align-top">
                                             <tr>
                                                 <th scope="col" className="px-4 py-3 text-center w-20">#</th>
-                                                <th scope="col" className="px-4 py-3 text-center w-1/12">Unique Key</th>
                                                 <th scope="col" className="px-4 py-3">Candidate Name</th>
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">DOB</th>
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Caste</th>
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Gender</th>
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Mobile</th>
+                                                <th scope="col" className="px-4 py-3 text-center w-1/12">Start Date</th>
+                                                <th scope="col" className="px-4 py-3 text-center w-1/12">End Date</th>
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Department</th>
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Action</th>
                                             </tr>
@@ -241,12 +257,13 @@ const ListDetails = () => {
                                                     (data?.list?.map((item, index) => (
                                                         <tr className="bg-white border-b hover:bg-gray-50">
                                                             <td className="px-4 py-3 text-center">{ index + 1 }</td>
-                                                            <td className="px-4 py-3 text-center">{ item?.candidateId ?? "N/A" }</td>
                                                             <td className="px-4 py-3">{ item?.vsCandidateName ?? "N/A" }</td>
                                                             <td className="px-4 py-3 text-center">{ dayjs(item?.vsDOB).format("YYYY-MM-DD") ?? "N/A" }</td>
                                                             <td className="px-4 py-3 text-center">{ item?.caste ?? "N/A" }</td>
                                                             <td className="px-4 py-3 text-center">{ item?.vsGender ?? "N/A" }</td>
                                                             <td className="px-4 py-3 text-center">{ item?.vsMobile ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ dayjs(item?.batchStartDate).format("YYYY-MM-DD") ?? "N/A" }</td>
+                                                            <td className="px-4 py-3 text-center">{ dayjs(item?.batchEndDate).format("YYYY-MM-DD") ?? "N/A" }</td>
                                                             <td className="px-4 py-3 text-center">{ item?.departmentName ?? "N/A" }</td>
                                                             <td className="px-4 py-3 text-center">
                                                                 <a href="" className="text-blue-600 hover:underline">View</a>
