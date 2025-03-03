@@ -60,11 +60,6 @@ const ListDetails = () => {
         refetch();
     }, [filters])
 
-
-    // if (isLoading) {
-    //     return <Loader />
-    // }
-
     return (
         <div className="min-h-screen flex flex-col bg-gray-50">
             {/* {/* Topbar */ }
@@ -234,7 +229,6 @@ const ListDetails = () => {
                                                 <th scope="col" className="px-4 py-3 text-center w-1/12">Action</th>
                                             </tr>
                                         </thead>
-
                                         { isLoading ?
                                             <tbody>
                                                 <tr>
