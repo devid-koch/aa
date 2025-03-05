@@ -22,6 +22,7 @@
     "@mui/x-date-pickers-pro": "latest",
     "@mui/x-tree-view": "latest",
     "@react-spring/web": "latest",
+    "@tailwindcss/vite": "^4.0.9",
     "@tanstack/react-query": "^5.49.2",
     "@types/react": "latest",
     "@types/react-dom": "latest",
@@ -36,6 +37,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.5",
     "sonner": "^1.0.3",
+    "tailwindcss": "^4.0.9",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
